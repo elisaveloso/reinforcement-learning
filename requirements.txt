@@ -1,0 +1,12 @@
+flwr
+stable-baselines3
+gymnasium
+numpy
+pandas
+matplotlib
+opencv-python
+scikit-learn
+tqdm
+seaborn
+tensorboard
+torchvision
