@@ -39,6 +39,11 @@ class FlowerClient(fl.client.NumPyClient):
     def fit(self, parameters, config: Dict[str, str]):
         self.set_parameters(parameters)
         epochs = int(config.get("local_epochs", 1))
+        # Optionally override learning rate per round via config
+        lr_cfg = float(config.get("learning_rate", 0.0))
+        if lr_cfg > 0:
+            for g in self.optimizer.param_groups:
+                g["lr"] = lr_cfg
         self.model.train()
         for _ in range(epochs):
             for images, labels in self.train_loader:
@@ -48,7 +53,7 @@ class FlowerClient(fl.client.NumPyClient):
                 loss = self.criterion(outputs, labels)
                 loss.backward()
                 self.optimizer.step()
-        return self.get_parameters({}), len(self.train_loader.dataset), {}
+        return self.get_parameters({}), len(self.train_loader.dataset), {"lr": self.optimizer.param_groups[0]["lr"], "epochs": epochs}
 
     def evaluate(self, parameters, config: Dict[str, str]):
         self.set_parameters(parameters)

@@ -4,10 +4,8 @@ import torch.nn.functional as F
 
 
 class SimpleCNN(nn.Module):
-    """A small CNN for binary image classification.
-
-    Input: 3xHxW (we resize to 240x320 in transforms)
-    Output: logits for 2 classes
+    """
+    Input: 3xHxW (240x320 in transforms)
     """
     def __init__(self, num_classes: int = 2):
         super().__init__()
@@ -17,7 +15,7 @@ class SimpleCNN(nn.Module):
         self.pool2 = nn.MaxPool2d(2, 2)
         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
         self.pool3 = nn.MaxPool2d(2, 2)
-        # Make the network robust to input size by using AdaptiveAvgPool2d
+       
         self.gap = nn.AdaptiveAvgPool2d((4, 4))
         self.dropout = nn.Dropout(0.25)
         self.fc1 = nn.Linear(64 * 4 * 4, 128)
