@@ -1,39 +1,39 @@
-# Projeto Básico de Aprendizado Federado com Reinforcement Learning (DQN)
+# Basic Federated Learning Project with Reinforcement Learning (DQN)
 
-Este projeto implementa um sistema de Aprendizado Federado (Federated Learning) onde um servidor utiliza um agente de Aprendizado por Reforço (DQN) para selecionar dinamicamente o número de clientes participantes em cada rodada de treinamento.
+This project implements a Federated Learning system where a server uses a Reinforcement Learning agent (DQN) to dynamically select the number of participating clients in each training round.
 
-## Estrutura
+## Structure
 
-- `dataset.py`: Carrega e particiona o dataset de imagens (daninha vs nao_daninha).
-- `model.py`: Define a arquitetura da Rede Neural Convolucional (CNN).
-- `client.py`: Define o Cliente Flower que treina o modelo localmente.
-- `rl_agent.py`: Implementa o agente DQN (Deep Q-Network).
-- `main.py`: Configura a simulação, a estratégia customizada e inicia o treinamento.
+- `dataset.py`: Loads and partitions the image dataset (weed vs non-weed).
+- `model.py`: Defines the Convolutional Neural Network (CNN) architecture.
+- `client.py`: Defines the Flower Client that trains the model locally.
+- `rl_agent.py`: Implements the DQN (Deep Q-Network) agent.
+- `main.py`: Configures the simulation, the custom strategy, and starts training.
 
-## Como Executar
+## How to Run
 
-1. Certifique-se de estar no ambiente virtual correto:
-   ```bash
-   source ../venv/bin/activate
-   ```
+1. Make sure you are in the correct virtual environment:
+    ```bash
+    source ../venv/bin/activate
+    ```
 
-2. Instale as dependências (se ainda não estiverem instaladas):
-   ```bash
-   pip install flwr torch torchvision numpy
-   ```
+2. Install dependencies (if not already installed):
+    ```bash
+    pip install flwr torch torchvision numpy
+    ```
 
-3. Execute a simulação:
-   ```bash
-   python main.py
-   ```
+3. Run the simulation:
+    ```bash
+    python main.py
+    ```
 
-## Funcionamento
+## How It Works
 
-- O projeto utiliza um loop customizado de Aprendizado Federado (sem usar o `flwr.simulation` para evitar overhead de memória em ambientes restritos).
-- O **Agente RL** observa o estado atual (número da rodada e acurácia da rodada anterior).
-- Ele escolhe uma **Ação**: quantos clientes (de 1 a 5) devem participar do treinamento nesta rodada.
-- O **Loop Principal** seleciona os clientes aleatoriamente e coordena o treinamento:
-    - Cada cliente treina localmente em sua partição de dados.
-    - Os parâmetros são agregados pelo servidor (FedAvg).
-    - A acurácia global é estimada pela média das acurácias dos clientes.
-- O agente recebe uma **Recompensa** baseada na acurácia obtida menos um custo por cliente utilizado.
+- The project uses a custom Federated Learning loop (not using `flwr.simulation` to avoid memory overhead in constrained environments).
+- The **RL Agent** observes the current state (round number and previous round accuracy).
+- It chooses an **Action**: how many clients (from 1 to 5) should participate in this round.
+- The **Main Loop** randomly selects clients and coordinates training:
+     - Each client trains locally on its data partition.
+     - Parameters are aggregated by the server (FedAvg).
+     - Global accuracy is estimated by averaging the clients' accuracies.
+- The agent receives a **Reward** based on the achieved accuracy minus a cost per client used.
